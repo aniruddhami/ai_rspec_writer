@@ -2,7 +2,6 @@ require_relative "ai_rspec_writer/configuration"
 require_relative "ai_rspec_writer/version"
 require_relative "ai_rspec_writer/generator"
 require_relative "ai_rspec_writer/spec_file_handler"
-require_relative "ai_rspec_writer/constants"
 require "colorize"
 
 module AiRspecWriter

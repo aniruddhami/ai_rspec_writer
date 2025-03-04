@@ -7,15 +7,15 @@ require_relative "../lib/ai_rspec_writer"
 require_relative "../lib/ai_rspec_writer/schema_extractor"
 
 if AiRspecWriter.configuration.chatgpt_api_key.nil? || AiRspecWriter.configuration.gemini_api_key.nil?
-  puts "❌ ChatGPT API key is missing.".red
-  puts "ℹ️  Set it in `.env`, or use `export CHATGPT_API_KEY=your-key`.".yellow
+  puts "❌ API key is missing.".red
+  puts "ℹ️  Set it in `.env`, or use `export CHATGPT_API_KEY=your-key` `export GEMINI_API_KEY=your-key`.".yellow
   exit 1
 end
 
 
 options = {}
 
-OptionParser.new do |opts|
+parser = OptionParser.new do |opts|
   opts.banner = "Usage: ai_rspec_writer [options]"
 
   opts.on("-f FILES", "--files=FILES", "Specify the files to generate tests for (comma-separated)(eg main_file,secondary_file,....)") do |files|
@@ -33,7 +33,24 @@ OptionParser.new do |opts|
   opts.on("-e COMMENT", "--ec=COMMENT", "Add Extra Comment at the time of generating test") do |comment|
     options[:extra_comment] = comment
   end  
-end.parse!
+end
+
+begin
+  parser.parse!
+  if options[:files].nil?
+    puts "❌ Error: '-f' (files) option is required. Use -f <file1,file2> to specify files.".red
+    exit 1
+  end
+rescue OptionParser::MissingArgument => e
+  puts "❌ Error: #{e.message}".red
+  puts parser
+  exit 1
+rescue OptionParser::InvalidOption => e
+  puts "❌ Error: Invalid option #{e.message}".red
+  puts parser
+  exit 1
+end
+
 
 if options[:files]
 
