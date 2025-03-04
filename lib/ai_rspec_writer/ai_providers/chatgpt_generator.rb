@@ -17,9 +17,6 @@ module AIRspecWriter
 
       def generate_spec(file_content)
         my_schema = "check my table defination details: #{@schema}" if @schema
-
-        # puts  "Write RSpec tests for this Ruby code with all factory files and rubocop standards:\n\n#{file_content}\n\n#{@extra_comment}\n\n #{my_schema}"
-        
         # Define loading spinner
         spinner = TTY::Spinner.new("[:spinner] Generating AI-powered RSpec tests".yellow, format: :dots)
 
