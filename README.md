@@ -38,6 +38,8 @@ Create a `.env` file in your project root and add:
 CHATGPT_API_KEY=your-openai-api-key
 GEMINI_API_KEY=your-google-gemini-api-key
 DEFAULT_AI=chatgpt
+CHATGPT_MODEL=your-model
+GEMINI_MODEL=your-model
 ```
 
 Or export them in your terminal:
@@ -45,11 +47,19 @@ Or export them in your terminal:
 export CHATGPT_API_KEY="your-openai-api-key"
 export GEMINI_API_KEY="your-google-gemini-api-key"
 export DEFAULT_AI="chatgpt"
+export CHATGPT_MODEL="your-model"
+export GEMINI_MODEL="your-model"
 ```
 
+```
+Default Setting:
+GEMINI_MODEL=o3-mini
+CHATGPT_MODEL=gemini-2.0-flash
+DEFAULT_AI=chatgpt
+```
 ---
 
-## **📌 Usage**
+## **📌 Usage** 
 ### **Command Structure**
 ```sh
 bundle exec ai_rspec_writer -f <file_path> -t <table_names> -e "<extra_comment>" -a <ai_model>
@@ -58,12 +68,18 @@ bundle exec ai_rspec_writer -f <file_path> -t <table_names> -e "<extra_comment>"
 ### **🔹 Example Commands**
 #### ✅ Generate RSpec tests using `Gemini AI`
 ```sh
-bundle exec ai_rspec_writer -f app/controllers/obento/obento_zaikos_controller.rb,app/models/store_notification.rb,app/models/common_setting.rb   -t store_notifications,common_settings   -e "use devise admin and ensure 100% test coverage"   -a gemini
+bundle exec ai_rspec_writer -f app/controllers/obento/obento_zaikos_controller.rb,app/models/store_notification.rb,app/models/common_setting.rb -t store_notifications,common_settings -e "use devise admin and ensure 100% test coverage" -a gemini
 ```
 
 #### ✅ Generate RSpec tests using `ChatGPT AI`
 ```sh
-bundle exec ai_rspec_writer -f app/controllers/obento/obento_zaikos_controller.rb,app/models/store_notification.rb,app/models/common_setting.rb   -t store_notifications,common_settings   -e "use devise admin and ensure 100% test coverage"   -a chatgpt
+bundle exec ai_rspec_writer -f app/controllers/obento/obento_zaikos_controller.rb,app/models/store_notification.rb,app/models/common_setting.rb -t store_notifications,common_settings   -e "use devise admin and ensure 100% test coverage" -a chatgpt
+```
+
+#### ✅ Generate RSpec tests without -a flag
+If no AI model (-a) is passed, ai_rspec_writer will default to DEFAULT_AI from .env or use ChatGPT if not explicitly set.
+```sh
+bundle exec ai_rspec_writer -f app/controllers/obento/obento_zaikos_controller.rb,app/models/store_notification.rb,app/models/common_setting.rb -t store_notifications,common_settings   -e "use devise admin and ensure 100% test coverage"
 ```
 
 ---
@@ -110,21 +126,6 @@ end
 
 ---
 
-## **🛠 Configuration**
-You can configure AI preferences in:
-```ruby
-# config/initializers/ai_rspec_writer.rb
-AiRspecWriter.configure do |config|
-  config.chatgpt_api_key = ENV["CHATGPT_API_KEY"]
-  config.gemini_api_key = ENV["GEMINI_API_KEY"]
-  config.ai_provider = "chatgpt" # Default AI (chatgpt or gemini)
-  config.chatgpt_model = "gpt-4"
-  config.gemini_model = "gemini-2.0-pro"
-end
-```
-
----
-
 ## **⚠️ Troubleshooting**
 ### **❌ `ChatGPT API key is missing.`**
 **Solution:** Set the API key in `.env`:
@@ -162,7 +163,7 @@ This project is licensed under the **MIT License**.
 ---
 
 ## **👨‍💻 Contributors**
-- **Your Name** (@yourgithub)
+- **Your Name** (@aniruddhami)
 - **Open for Contributions!** Feel free to fork & improve.
 
 ---
