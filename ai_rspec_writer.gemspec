@@ -12,6 +12,11 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/aniruddhami/ai_rspec_writer"
   spec.license       = "MIT"
 
+  spec.metadata['homepage_uri'] = spec.homepage
+  spec.metadata['source_code_uri'] = 'https://github.com/aniruddhami/ai_rspec_writer'
+  spec.metadata['changelog_uri'] = 'https://github.com/aniruddhami/ai_rspec_writer/blob/main/CHANGELOG.md'
+  spec.metadata['github_repo'] = 'https://github.com/aniruddhami/ai_rspec_writer'
+
   spec.required_ruby_version = ">= 3.0.0"
 
   spec.files         = Dir["lib/**/*", "bin/*", "README.md", "LICENSE"]
