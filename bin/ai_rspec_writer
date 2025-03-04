@@ -1,0 +1,48 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+require "optparse"
+require_relative "../lib/ai_rspec_writer"
+require_relative "../lib/ai_rspec_writer/schema_extractor"
+
+if AiRspecWriter.configuration.chatgpt_api_key.nil? || AiRspecWriter.configuration.gemini_api_key.nil?
+  puts "❌ ChatGPT API key is missing.".red
+  puts "ℹ️  Set it in `.env`, or use `export CHATGPT_API_KEY=your-key`.".yellow
+  exit 1
+end
+
+
+options = {}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: ai_rspec_writer [options]"
+
+  opts.on("-f FILES", "--files=FILES", "Specify the files to generate tests for (comma-separated)(eg main_file,secondary_file,....)") do |files|
+    options[:files] = files.split(",").map(&:strip)
+  end
+
+  opts.on("-t table_names", "--table_name=TABLE_NAME", "Table name to find schema") do |table_names|
+    options[:table_names] = table_names.split(",").map(&:strip)
+  end
+
+  opts.on("-a AI", "--ai=AI", "Specify AI: chatgpt, gemini (default: chatgpt)") do |ai|
+    options[:ai] = ai
+  end
+
+  opts.on("-e COMMENT", "--ec=COMMENT", "Add Extra Comment at the time of generating test") do |comment|
+    options[:extra_comment] = comment
+  end  
+end.parse!
+
+if options[:files]
+
+  schema = AIRspecWriter::SchemaExtractor.extract_schema_from_file(options[:table_names])
+
+  generator = AIRspecWriter::Generator.new(ai: options[:ai], ec: options[:extra_comment], schema: schema)
+  spec_code = generator.generate(options[:files])
+  
+  AIRspecWriter::SpecFileHandler.save_spec_file(options[:files][0], spec_code)
+else
+  puts "❌ Error: Please provide a file to generate tests for using `-f`"
+end
