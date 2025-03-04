@@ -163,7 +163,7 @@ This project is licensed under the **MIT License**.
 ---
 
 ## **👨‍💻 Contributors**
-- **Your Name** (@aniruddhami)
+- [@aniruddhami](https://github.com/aniruddhami) 🎉
 - **Open for Contributions!** Feel free to fork & improve.
 
 ---
