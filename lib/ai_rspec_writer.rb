@@ -4,6 +4,11 @@ require_relative "ai_rspec_writer/generator"
 require_relative "ai_rspec_writer/spec_file_handler"
 require "colorize"
 
+# Load Rails configuration only if inside a Rails application
+if defined?(Rails::Generators)
+  require_relative "generators/ai_rspec_writer/install_generator"
+end
+
 module AiRspecWriter
   class Error < StandardError; end
   class << self

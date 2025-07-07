@@ -6,7 +6,7 @@ require "optparse"
 require_relative "../lib/ai_rspec_writer"
 require_relative "../lib/ai_rspec_writer/schema_extractor"
 
-if AiRspecWriter.configuration.chatgpt_api_key.nil? || AiRspecWriter.configuration.gemini_api_key.nil?
+if AiRspecWriter.configuration.chatgpt_api_key.nil? && AiRspecWriter.configuration.gemini_api_key.nil?
   puts "❌ API key is missing.".red
   puts "ℹ️  Set it in `.env`, or use `export CHATGPT_API_KEY=your-key` `export GEMINI_API_KEY=your-key`.".yellow
   exit 1
