@@ -40,6 +40,9 @@ module AIRspecWriter
         
         # extract_ruby_code(full_content)
         full_content
+      rescue StandardError => e
+        spinner.error("(❌ An error occurred while calling ChatGPT AI: #{e.message})")
+        exit 1
       end
 
       private

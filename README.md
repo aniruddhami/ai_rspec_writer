@@ -32,14 +32,37 @@ end
 bundle install
 ```
 
-### **3️⃣ Set up API Keys**
-Create a `.env` file in your project root and add:
+### **3️⃣ Generate Configuration Files**
+Run the generator to create the necessary configuration files:
+```sh
+rails generate ai_rspec_writer:install
+```
+
+**What this command does:**
+- 📁 Creates `config/initializers/ai_rspec_writer.rb` with default configuration
+- 📄 Generates `.env.example` file with required environment variables
+- 🔧 Sets up default AI models and configuration options
+- 📝 Creates sample configuration for easy customization
+
+**Generated files:**
+```
+config/initializers/ai_rspec_writer.rb
+.env.example
+```
+
+### **4️⃣ Set up API Keys**
+Copy the example environment file and add your API keys:
+```sh
+cp .env.example .env
+```
+
+Edit `.env` file and add your API keys:
 ```
 CHATGPT_API_KEY=your-openai-api-key
 GEMINI_API_KEY=your-google-gemini-api-key
 DEFAULT_AI=chatgpt
-CHATGPT_MODEL=your-model
-GEMINI_MODEL=your-model
+CHATGPT_MODEL=gpt-4
+GEMINI_MODEL=gemini-2.0-flash-exp
 ```
 
 Or export them in your terminal:
@@ -47,16 +70,17 @@ Or export them in your terminal:
 export CHATGPT_API_KEY="your-openai-api-key"
 export GEMINI_API_KEY="your-google-gemini-api-key"
 export DEFAULT_AI="chatgpt"
-export CHATGPT_MODEL="your-model"
-export GEMINI_MODEL="your-model"
+export CHATGPT_MODEL="gpt-4"
+export GEMINI_MODEL="gemini-2.0-flash-exp"
 ```
 
+**Default Settings:**
 ```
-Default Setting:
-GEMINI_MODEL=o3-mini
-CHATGPT_MODEL=gemini-2.0-flash
+GEMINI_MODEL=gemini-2.0-flash-exp
+CHATGPT_MODEL=gpt-4
 DEFAULT_AI=chatgpt
 ```
+
 ---
 
 ## **📌 Usage** 
@@ -91,6 +115,26 @@ bundle exec ai_rspec_writer -f app/controllers/obento/obento_zaikos_controller.r
 | `-t, --table_name` | **Database tables** to extract schema info for tests. | `-t users,orders` |
 | `-e, --ec` | **Extra comments** to customize test behavior. | `-e "use Devise authentication"` |
 | `-a, --ai` | **AI model** to use (`chatgpt` or `gemini`). | `-a gemini` |
+
+---
+
+## **⚙️ Configuration**
+After running the install generator, you can customize the gem's behavior by editing `config/initializers/ai_rspec_writer.rb`:
+
+```ruby
+AiRspecWriter.configure do |config|
+  config.chatgpt_api_key = ENV['CHATGPT_API_KEY']
+  config.gemini_api_key = ENV['GEMINI_API_KEY']
+  config.default_ai = ENV['DEFAULT_AI'] || 'chatgpt'
+  config.chatgpt_model = ENV['CHATGPT_MODEL'] || 'gpt-4'
+  config.gemini_model = ENV['GEMINI_MODEL'] || 'gemini-2.0-flash-exp'
+  
+  # Optional: Customize default behavior
+  config.output_directory = 'spec'
+  config.include_factory_bot = true
+  config.include_shoulda_matchers = true
+end
+```
 
 ---
 
@@ -153,6 +197,12 @@ bundle exec ai_rspec_writer -f app/models/user.rb
 **Solution:** Try providing additional **extra comments**:
 ```sh
 bundle exec ai_rspec_writer -f app/models/user.rb -e "Generate edge case tests"
+```
+
+### **❌ `Initializer not found` error**
+**Solution:** Make sure you ran the install generator:
+```sh
+rails generate ai_rspec_writer:install
 ```
 
 ---
